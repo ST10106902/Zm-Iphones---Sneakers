@@ -160,36 +160,6 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Newsletter Section */}
-            <section className="py-32 bg-[#0A0A0B] text-white overflow-hidden relative">
-                <div className="container mx-auto px-4 md:px-8 text-center max-w-4xl relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <h2 className="text-5xl md:text-7xl font-black mb-8 italic tracking-tighter uppercase">Stay in the Loop</h2>
-                        <p className="text-slate-400 text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-medium caps">
-                            Get exclusive deals, new arrivals, and special offers delivered to your inbox.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto bg-white/5 p-2 rounded-[32px] border border-white/10 backdrop-blur-xl">
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="flex-grow bg-transparent border-none py-4 px-8 text-white focus:outline-hidden text-lg font-medium"
-                            />
-                            <button className="px-12 py-5 bg-amber-500 text-black font-black rounded-[24px] hover:bg-amber-400 transition-all shadow-xl shadow-amber-500/20 uppercase tracking-widest text-xs">
-                                Subscribe
-                            </button>
-                        </div>
-                    </motion.div>
-                </div>
-
-                {/* Decorative elements */}
-                <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-transparent to-black/50"></div>
-                <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-amber-500/10 rounded-full blur-[120px]"></div>
-                <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px]"></div>
-            </section>
         </div>
     );
 };
