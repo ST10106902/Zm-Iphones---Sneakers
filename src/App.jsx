@@ -1,28 +1,25 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import Layout from './components/Layout';
 import Home from './pages/Home';
-import Products from './pages/Products';
 import Cart from './pages/Cart';
+import ProductDetail from './pages/ProductDetail';
+import Support from './pages/Support';
 import { CartProvider } from './hooks/useCart';
 
 function App() {
   return (
     <CartProvider>
       <Router>
-        <div className="min-h-screen flex flex-col">
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="*" element={<Home />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/support/:type" element={<Support />} />
+            <Route path="*" element={<Home />} />
+          </Routes>
+        </Layout>
       </Router>
     </CartProvider>
   );

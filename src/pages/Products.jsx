@@ -1,87 +1,160 @@
-import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, SlidersHorizontal, ChevronRight, Grid, List, X, Filter } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { products } from '../data/products';
 
 const Products = () => {
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const categoryParam = searchParams.get('category');
     const [activeCategory, setActiveCategory] = useState(categoryParam || 'all');
     const [searchQuery, setSearchQuery] = useState('');
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-    const categories = ['all', 'iphone', 'laptop', 'sneakers'];
+    const categories = [
+        { id: 'all', label: 'All Assets' },
+        { id: 'phones', label: 'Phones' },
+        { id: 'laptop', label: 'Laptops' },
+        { id: 'sneakers', label: 'Sneakers' }
+    ];
+
+    useEffect(() => {
+        if (categoryParam) {
+            setActiveCategory(categoryParam);
+        }
+    }, [categoryParam]);
+
+    const handleCategoryChange = (catId) => {
+        setActiveCategory(catId);
+        setSearchParams(catId === 'all' ? {} : { category: catId });
+    };
 
     const filteredProducts = products.filter(product => {
         const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
-        const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.brand?.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesCategory && matchesSearch;
     });
 
     return (
-        <div className="pt-40 pb-32 min-h-screen bg-[#0A0A0B] text-white">
-            <div className="container mx-auto px-4 md:px-8">
-                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12 mb-20 bg-white/5 p-12 rounded-[48px] border border-white/10 backdrop-blur-3xl">
-                    <div>
-                        <div className="w-20 h-1.5 bg-amber-500 mb-8 rounded-full"></div>
-                        <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-4 italic uppercase leading-none">The Catalog</h1>
-                        <p className="text-slate-400 font-black text-xs italic tracking-[0.4em] uppercase">Curated Elite Assets</p>
+        <div className="pt-32 pb-24 min-h-screen bg-bg-main">
+            <div className="container">
+                {/* Header Section */}
+                <div className="mb-16">
+                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-text-muted mb-6">
+                        <Link to="/" className="hover:text-sky-500 transition-colors">Home</Link>
+                        <ChevronRight size={10} className="text-gray-300" />
+                        <span className="text-gray-900">Collections</span>
+                        {activeCategory !== 'all' && (
+                            <>
+                                <ChevronRight size={10} className="text-gray-300" />
+                                <span className="text-sky-500">{activeCategory}</span>
+                            </>
+                        )}
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto">
-                        <div className="relative group flex-grow lg:w-96">
-                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-amber-500 transition-colors" size={20} />
-                            <input
-                                type="text"
-                                placeholder="SEARCH THE VAULT"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-16 pr-6 py-5 bg-black/40 border border-white/10 rounded-2xl text-[10px] font-black tracking-[0.2em] text-white focus:outline-hidden focus:border-amber-500 transition-all uppercase placeholder:text-slate-700"
-                            />
+                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10">
+                        <div className="max-w-2xl">
+                            <h1 className="text-6xl md:text-8xl font-black text-gray-900 tracking-tighter mb-6 uppercase italic leading-[0.9]">
+                                The <span className="text-sky-500">Inventory</span>
+                            </h1>
+                            <p className="text-text-muted font-medium text-lg leading-relaxed max-w-md">
+                                Curated excellence. Every item in our catalog is verified for authenticity and premium quality.
+                            </p>
                         </div>
-                        <button className="flex items-center justify-center gap-3 px-10 py-5 bg-white text-black rounded-2xl text-[10px] font-black tracking-widest uppercase hover:bg-amber-500 transition-all shadow-xl active:scale-95">
-                            <SlidersHorizontal size={18} />
-                            Filters
-                        </button>
+
+                        <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+                            <div className="relative group flex-grow lg:min-w-[400px]">
+                                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-sky-500 transition-colors" size={18} />
+                                <input
+                                    type="text"
+                                    placeholder="Search by model or brand..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full pl-14 pr-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-sky-500/5 focus:bg-white focus:border-sky-500 transition-all"
+                                />
+                                {searchQuery && (
+                                    <button
+                                        onClick={() => setSearchQuery('')}
+                                        className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-900"
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                )}
+                            </div>
+                            <button
+                                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                                className={`flex items-center justify-center gap-2 px-8 py-5 rounded-2xl text-sm font-bold transition-all shadow-sm border ${isFilterOpen ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-100 text-gray-900 hover:bg-gray-50'
+                                    }`}
+                            >
+                                <SlidersHorizontal size={18} />
+                                Filters
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                {/* Category Tabs */}
-                <div className="flex flex-wrap gap-4 mb-20 justify-center">
+                {/* Category Navigation */}
+                <div className="flex flex-wrap items-center gap-2 mb-12 border-b border-gray-100 pb-2">
                     {categories.map((cat) => (
                         <button
-                            key={cat}
-                            onClick={() => setActiveCategory(cat)}
-                            className={`px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all border ${activeCategory === cat
-                                ? 'bg-amber-500 text-black border-amber-500 shadow-2xl shadow-amber-500/20 scale-105'
-                                : 'bg-white/5 text-slate-500 hover:text-white hover:bg-white/10 border-white/5'
+                            key={cat.id}
+                            onClick={() => handleCategoryChange(cat.id)}
+                            className={`relative px-6 py-4 text-sm font-bold uppercase tracking-widest transition-all ${activeCategory === cat.id ? 'text-sky-500' : 'text-text-muted hover:text-gray-900'
                                 }`}
                         >
-                            {cat}
+                            {cat.label}
+                            {activeCategory === cat.id && (
+                                <motion.div
+                                    layoutId="activeTab"
+                                    className="absolute bottom-0 left-0 right-0 h-1 bg-sky-500 rounded-full"
+                                />
+                            )}
                         </button>
                     ))}
+                    <div className="ml-auto flex items-center gap-4 text-text-muted text-xs font-bold uppercase tracking-widest hidden md:flex">
+                        <span>Showing {filteredProducts.length} Results</span>
+                    </div>
                 </div>
 
                 {/* Products Grid */}
-                {filteredProducts.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                        {filteredProducts.map((product) => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center py-40 bg-white/5 rounded-[60px] border border-white/5 backdrop-blur-3xl">
-                        <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-8">
-                            <Search size={40} className="text-amber-500/30" />
-                        </div>
-                        <h3 className="text-4xl font-black italic mb-4 uppercase tracking-tighter">No assets found</h3>
-                        <p className="text-slate-500 font-bold uppercase text-[10px] tracking-[0.3em] max-w-sm mx-auto leading-relaxed">Adjust your search parameters to find elite items in our inventory.</p>
-                    </div>
-                )}
+                <div className="min-h-[400px]">
+                    {filteredProducts.length > 0 ? (
+                        <motion.div
+                            layout
+                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+                        >
+                            <AnimatePresence>
+                                {filteredProducts.map((product) => (
+                                    <ProductCard key={product.id} product={product} />
+                                ))}
+                            </AnimatePresence>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="text-center py-40 bg-gray-50 rounded-[40px] border border-dashed border-gray-200"
+                        >
+                            <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-sm">
+                                <Search size={40} className="text-gray-200" />
+                            </div>
+                            <h3 className="text-3xl font-black text-gray-900 mb-4 uppercase italic">No Match Found</h3>
+                            <p className="text-text-muted max-w-sm mx-auto font-medium mb-10">We couldn't find any assets matching your criteria. Try adjusting your search or filters.</p>
+                            <button
+                                onClick={() => { handleCategoryChange('all'); setSearchQuery(''); }}
+                                className="btn-primary mx-auto"
+                            >
+                                Clear All Search
+                            </button>
+                        </motion.div>
+                    )}
+                </div>
             </div>
         </div>
     );
 };
 
 export default Products;
+
