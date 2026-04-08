@@ -6,7 +6,7 @@ export const products = [
         brand: 'Apple',
         price: 18499,
         category: 'phones',
-        image: 'https://images.unsplash.com/photo-1680193181816-bc5727be50d9?q=80&w=800',
+        image: '/images/iphone-14-pro.png',
         description: 'Dynamic Island, Always-On display, and a 48MP Main camera for incredible detail.',
         featured: true
     },
@@ -16,7 +16,7 @@ export const products = [
         brand: 'Apple',
         price: 14999,
         category: 'phones',
-        image: 'https://images.unsplash.com/photo-1662916891000-0df145027581?q=80&w=800',
+        image: '/images/iphone-14.png',
         description: 'Vibrant Super Retina XDR display, advanced dual-camera system, and all-day battery life.',
         featured: true
     },
@@ -26,7 +26,7 @@ export const products = [
         brand: 'Apple',
         price: 11999,
         category: 'phones',
-        image: 'https://images.unsplash.com/photo-1639242211014-99745778893d?q=80&w=800',
+        image: '/images/iphone-13.png',
         description: 'Advanced dual-camera system, A15 Bionic chip, and a big leap in battery life.',
         featured: true
     },
@@ -36,7 +36,7 @@ export const products = [
         brand: 'Apple',
         price: 8999,
         category: 'phones',
-        image: 'https://images.unsplash.com/photo-1611791484670-ce4957dcad15?q=80&w=800',
+        image: '/images/iphone-12.png',
         description: 'Super Retina XDR display, Ceramic Shield, and 5G speed in a sleek design.',
         featured: false
     },
@@ -46,7 +46,7 @@ export const products = [
         brand: 'Apple',
         price: 6499,
         category: 'phones',
-        image: 'https://images.unsplash.com/photo-1574755393849-623942496936?q=80&w=800',
+        image: '/images/iphone-11.png',
         description: 'Just the right amount of everything. Dual-camera system and all-day battery.',
         featured: false
     },
@@ -56,7 +56,7 @@ export const products = [
         brand: 'Apple',
         price: 4999,
         category: 'phones',
-        image: 'https://images.unsplash.com/photo-1550029001-dc95ef86144e?q=80&w=800',
+        image: '/images/iphone-xr.png',
         description: 'Brilliant Liquid Retina display and six stunning finishes.',
         featured: false
     },
@@ -109,5 +109,46 @@ export const products = [
         image: 'https://images.unsplash.com/photo-1556656793-062ff98782ee?q=80&w=800',
         description: 'Compact, powerful, and water-resistant. The classic everyday iPhone.',
         featured: false
+    },
+    // SNEAKERS
+    {
+        id: 's1',
+        name: "Air Jordan 1 High 'Chicago'",
+        brand: 'Jordan',
+        price: 8499,
+        category: 'sneakers',
+        image: 'https://images.unsplash.com/photo-1620138546344-7b2c0b05137d?q=80&w=800',
+        description: 'The legendary silhouette in the iconic red, white, and black colorway.',
+        featured: true
+    },
+    {
+        id: 's2',
+        name: "Nike Dunk Low 'Panda'",
+        brand: 'Nike',
+        price: 3299,
+        category: 'sneakers',
+        image: 'https://images.unsplash.com/photo-1634560731057-3f30999fe51f?q=80&w=800',
+        description: 'Clean, versatile, and perpetually in demand. The classic black and white Dunk.',
+        featured: true
+    },
+    {
+        id: 's3',
+        name: "Adidas Yeezy Boost 350 V2 'Zebra'",
+        brand: 'Adidas',
+        price: 6999,
+        category: 'sneakers',
+        image: 'https://images.unsplash.com/photo-1581440713739-6f9a0c776097?q=80&w=800',
+        description: 'Comfort meets avant-garde style with Boost cushioning and Primeknit upper.',
+        featured: false
+    },
+    {
+        id: 's4',
+        name: "New Balance 550 'White Green'",
+        brand: 'New Balance',
+        price: 2799,
+        category: 'sneakers',
+        image: 'https://images.unsplash.com/photo-1688537446554-7f1cd8f8883e?q=80&w=800',
+        description: 'Vintage basketball style reborn. The 550 is the ultimate lifestyle essential.',
+        featured: true
     }
 ];

@@ -2,18 +2,15 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Trash2, Plus, Minus, ArrowRight, CheckCircle2, ShoppingCart, ShieldCheck, Truck, RefreshCw } from 'lucide-react';
 import { useCart } from '../hooks/useCart';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Cart = () => {
     const { cart, removeFromCart, updateQuantity, clearCart, getCartTotal } = useCart();
+    const navigate = useNavigate();
     const [status, setStatus] = useState('idle'); // idle, processing, success
 
     const handleCheckout = () => {
-        setStatus('processing');
-        setTimeout(() => {
-            setStatus('success');
-            clearCart();
-        }, 3000);
+        navigate('/checkout');
     };
 
     if (status === 'success') {

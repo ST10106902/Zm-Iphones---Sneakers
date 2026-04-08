@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Menu, X, Smartphone, Laptop, Footprints, Search } from 'lucide-react';
+import { ShoppingCart, Menu, X, Smartphone, Laptop, Footprints, Search, LayoutDashboard } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
+import { useAuth } from '../hooks/useAuth';
+import { LogOut, User as UserIcon, LogIn } from 'lucide-react';
 
 const Navbar = ({ scrolled }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const { cartCount } = useCart();
+    const { user, logout, isAdmin, isAuthenticated } = useAuth();
     const location = useLocation();
-    const isHomePage = location.pathname === '/';
 
     const navLinks = [
-        { name: 'Store', path: '/', icon: <Smartphone size={16} /> },
+        { name: 'Store', path: '/', icon: <Smartphone size={16} />, show: true },
+        { name: 'Manage', path: '/admin', icon: <LayoutDashboard size={16} />, show: isAdmin },
     ];
 
     // Close mobile menu on route change
@@ -42,7 +45,7 @@ const Navbar = ({ scrolled }) => {
 
                 {/* Desktop Nav */}
                 <div className="hidden lg:flex items-center gap-1">
-                    {navLinks.map((link) => (
+                    {navLinks.filter(link => link.show).map((link) => (
                         <Link
                             key={link.name}
                             to={link.path}
@@ -92,6 +95,30 @@ const Navbar = ({ scrolled }) => {
                             )}
                         </AnimatePresence>
                     </Link>
+
+                    {isAuthenticated ? (
+                        <div className="flex items-center gap-2">
+                            <div className="hidden sm:flex flex-col items-end mr-2">
+                                <span className="text-[10px] font-black text-gray-900 leading-none uppercase">{user.name}</span>
+                                <span className="text-[8px] font-bold text-sky-500 uppercase leading-none mt-1">{user.role}</span>
+                            </div>
+                            <button
+                                onClick={logout}
+                                className="p-3 rounded-2xl transition-all text-red-500 hover:bg-red-50 shadow-sm"
+                                title="Logout"
+                            >
+                                <LogOut size={20} />
+                            </button>
+                        </div>
+                    ) : (
+                        <Link
+                            to="/login"
+                            className="p-3 rounded-2xl transition-all text-sky-600 hover:bg-sky-50 shadow-sm flex items-center gap-2"
+                        >
+                            <LogIn size={20} />
+                            <span className="text-xs font-bold hidden sm:block uppercase tracking-widest">Login</span>
+                        </Link>
+                    )}
 
                     <button
                         className="lg:hidden p-3 rounded-2xl transition-all text-gray-700 hover:text-sky-600 hover:bg-white"
@@ -175,7 +202,7 @@ const Navbar = ({ scrolled }) => {
                         className="fixed inset-0 z-[50] pt-24 pb-12 px-6 bg-white flex flex-col lg:hidden"
                     >
                         <div className="flex flex-col gap-2 mt-8">
-                            {navLinks.map((link, i) => (
+                            {navLinks.filter(link => link.show).map((link, i) => (
                                 <motion.div
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
