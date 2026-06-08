@@ -4,6 +4,7 @@ import { ChevronLeft, ShieldCheck, Mail, User, MapPin, Phone, ArrowRight, CheckC
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
 import PaymentModal from '../components/PaymentModal';
+import { saveOrder, sendOrderEmail } from '../utils/emailService';
 
 const Checkout = () => {
     const { cart, getCartTotal, clearCart } = useCart();
@@ -11,6 +12,7 @@ const Checkout = () => {
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [paidAmount, setPaidAmount] = useState(0);
+    const [orderRef, setOrderRef] = useState('');
     const [formData, setFormData] = useState({
         email: '',
         firstName: '',
@@ -43,7 +45,36 @@ const Checkout = () => {
     };
 
     const handlePaymentSuccess = () => {
-        setPaidAmount(getCartTotal());
+        const refCode = 'ZM-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+        const finalTotal = getCartTotal();
+
+        const orderData = {
+            id: refCode,
+            date: new Date().toISOString(),
+            customer: {
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                email: formData.email,
+                phone: formData.phone,
+                address: formData.address,
+                city: formData.city
+            },
+            items: cart.map(item => ({
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
+                image: item.image
+            })),
+            total: finalTotal,
+            status: 'Pending'
+        };
+
+        saveOrder(orderData);
+        sendOrderEmail(orderData);
+
+        setOrderRef(refCode);
+        setPaidAmount(finalTotal);
         setIsPaymentModalOpen(false);
         setIsSuccess(true);
         clearCart();
@@ -78,7 +109,7 @@ const Checkout = () => {
                             <div className="flex justify-between items-center px-4">
                                 <div className="text-left">
                                     <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Reference</span>
-                                    <span className="text-xl font-black text-gray-900 tracking-tighter uppercase italic">ZM-{Math.random().toString(36).substr(2, 6).toUpperCase()}</span>
+                                    <span className="text-xl font-black text-gray-900 tracking-tighter uppercase italic">{orderRef}</span>
                                 </div>
                                 <div className="text-right">
                                     <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Amount Paid</span>

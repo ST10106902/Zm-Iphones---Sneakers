@@ -15,6 +15,8 @@ export const AuthProvider = ({ children }) => {
         let role = 'user';
         if (email === 'admin@zmstore.com' && password === 'admin123') {
             role = 'admin';
+        } else if (email === 'superadmin@zmstore.com' && password === 'superadmin123') {
+            role = 'super_admin';
         }
 
         const newUser = { email, role, name: email.split('@')[0] };
@@ -36,7 +38,8 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('zm_user');
     };
 
-    const isAdmin = user?.role === 'admin';
+    const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
+    const isSuperAdmin = user?.role === 'super_admin';
     const isAuthenticated = !!user;
 
     return (
@@ -46,6 +49,7 @@ export const AuthProvider = ({ children }) => {
             register,
             logout,
             isAdmin,
+            isSuperAdmin,
             isAuthenticated
         }}>
             {children}

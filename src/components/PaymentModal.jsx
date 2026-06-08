@@ -53,6 +53,23 @@ const PaymentModal = ({ isOpen, onClose, total, onPaymentSuccess }) => {
         }
     };
 
+    const handleDemoPay = () => {
+        setFormData({
+            cardNumber: '1111 2222 3333 4444',
+            expiry: '12/28',
+            cvc: '123',
+            name: 'Test Tester'
+        });
+        setErrors({});
+        setStep('processing');
+        setTimeout(() => {
+            setStep('success');
+            setTimeout(() => {
+                onPaymentSuccess();
+            }, 1000);
+        }, 1500);
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -167,6 +184,14 @@ const PaymentModal = ({ isOpen, onClose, total, onPaymentSuccess }) => {
                                     className="w-full py-6 bg-sky-600 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-xs transition-all hover:bg-gray-900 active:scale-95 shadow-xl shadow-sky-500/10 mt-4"
                                 >
                                     Pay R{total.toLocaleString()} Now
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={handleDemoPay}
+                                    className="w-full py-4 bg-amber-500 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-xs transition-all hover:bg-gray-900 active:scale-95 shadow-xl shadow-amber-500/15 mt-2 test-payment-btn"
+                                >
+                                    ⚡ Sandbox Fast Pay (Test Mode)
                                 </button>
 
                                 <div className="flex items-center justify-center gap-2 opacity-40">
